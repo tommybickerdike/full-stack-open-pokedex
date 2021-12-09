@@ -13,6 +13,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12.x"
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
+          heroku_app_name: "blooming-woodland-46628" #Must be unique in Heroku
+          heroku_email: "btommyb@gmail.com"
       - name: npm install
         run: npm install
       - name: lint
@@ -27,3 +32,6 @@ jobs:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:5000
+      - name: deploy
+        run: npm run deploy
+      
