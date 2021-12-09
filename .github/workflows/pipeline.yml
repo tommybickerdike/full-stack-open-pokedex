@@ -33,4 +33,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
           heroku_app_name: "blooming-woodland-46628"
           heroku_email: "btommyb@gmail.com"
+          healthcheck: "https://blooming-woodland-46628.herokuapp.com/health"
+          checkstring: "ok"
+          rollbackonhealthcheckfailed: true
       
