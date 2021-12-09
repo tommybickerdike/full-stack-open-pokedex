@@ -10,8 +10,7 @@
     "eslint": "eslint './**/*.{js,jsx}'",
     "build": "webpack --mode production",
 		"cypress:open": "cypress open",
-    "test:e2e": "cypress run",
-		"deploy": "git push heroku master"
+    "test:e2e": "cypress run"
   },
   "repository": {
     "type": "git",
