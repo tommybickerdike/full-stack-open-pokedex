@@ -15,9 +15,7 @@ jobs:
         uses: jtalk/url-health-check-action@v2
         with:
           url: https://blooming-woodland-46628.herokuapp.com/health
-          retry-all: no
       - name: Bad Health PING
         uses: jtalk/url-health-check-action@v2
         with:
           url: https://blooming-woodland-46628.herokuapp.com/bad-health
-          retry-all: no
