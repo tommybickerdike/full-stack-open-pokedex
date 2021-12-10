@@ -46,7 +46,7 @@ jobs:
           SKIP_CONDITION: ${{ github.event.commits.*.message }}.join().includes('#skip')
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-        if: ${{ github.event_name == 'push' && !env.SKIP_CONDITION }} 
+        if: ${{ github.event_name == 'push' && env.SKIP_CONDITION != 'true' }} 
         uses: anothrNick/github-tag-action@1.33.0
         
       
