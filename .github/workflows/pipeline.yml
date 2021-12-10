@@ -55,6 +55,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: commit messages
         env:
-          SKIP_CONDITION: ${{ toJson(github.event.commits.*.message.join().includes('#skip')) }}
+          SKIP_CONDITION: ${{ toJson(github.event.commits.*.message).join() }}
         run: echo "${{ env.SKIP_CONDITION }}"
       
