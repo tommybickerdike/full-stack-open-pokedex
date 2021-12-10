@@ -9,45 +9,60 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  simple_deployment_pipeline:
+  # simple_deployment_pipeline:
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: "12.x"
+  #     - name: npm install
+  #       run: npm install
+  #     - name: lint
+  #       run: npm run eslint
+  #     - name: build
+  #       run: npm run build
+  #     - name: test
+  #       run: npm run test
+  #     - name: e2e tests
+  #       uses: cypress-io/github-action@v2
+  #       with:
+  #         command: npm run test:e2e
+  #         start: npm run start-prod
+  #         wait-on: http://localhost:5000
+  #     - name: deploy  
+  #       uses: akhileshns/heroku-deploy@v3.12.12
+  #       if: ${{ github.event_name == 'push' }}
+  #       with:
+  #         heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
+  #         heroku_app_name: "blooming-woodland-46628"
+  #         heroku_email: "btommyb@gmail.com"
+  #         healthcheck: "https://blooming-woodland-46628.herokuapp.com/health"
+  #         checkstring: "ok"
+  #         rollbackonhealthcheckfailed: true
+  #     - uses: actions/checkout@v2
+  #     - name: Bump version and push tag
+  #       env:
+  #         SKIP_CONDITION: ${{ github.event.commits.*.message }}.join().includes('#skip')
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         DEFAULT_BUMP: patch
+  #       run: echo "${{ env.SKIP_CONDITION }}"
+  #       if: ${{ github.event_name == 'push' && env.SKIP_CONDITION != 'true' }} 
+  #       uses: anothrNick/github-tag-action@1.33.0
+  a_test_job:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - name: npm install
-        run: npm install
-      - name: lint
-        run: npm run eslint
-      - name: build
-        run: npm run build
-      - name: test
-        run: npm run test
-      - name: e2e tests
-        uses: cypress-io/github-action@v2
-        with:
-          command: npm run test:e2e
-          start: npm run start-prod
-          wait-on: http://localhost:5000
-      - name: deploy  
-        uses: akhileshns/heroku-deploy@v3.12.12
-        if: ${{ github.event_name == 'push' }}
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
-          heroku_app_name: "blooming-woodland-46628"
-          heroku_email: "btommyb@gmail.com"
-          healthcheck: "https://blooming-woodland-46628.herokuapp.com/health"
-          checkstring: "ok"
-          rollbackonhealthcheckfailed: true
-      - uses: actions/checkout@v2
-      - name: Bump version and push tag
+      - name: gihub context
         env:
-          SKIP_CONDITION: ${{ github.event.commits.*.message }}.join().includes('#skip')
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
-        run: echo "${{ env.SKIP_CONDITION }}"
-        if: ${{ github.event_name == 'push' && env.SKIP_CONDITION != 'true' }} 
-        uses: anothrNick/github-tag-action@1.33.0
-        
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: commits
+        env:
+          COMMITS: ${{ toJson(github.event.commits) }}
+        run: echo "$COMMITS"
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: echo "$COMMIT_MESSAGES"
       
