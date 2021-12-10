@@ -48,7 +48,7 @@ jobs:
           DEFAULT_BUMP: patch
         if: ${{ github.event_name == 'push' && !contains(env.COMMIT_MESSAGES, '#skip') }}
         uses: anothrNick/github-tag-action@1.33.0
-      - name: Slack Succesfull Deployment
+      - name: Slack Successful Deployment
         uses: 8398a7/action-slack@v3
         with:
           status: custom
