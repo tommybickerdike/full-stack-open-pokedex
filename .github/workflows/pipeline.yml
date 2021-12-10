@@ -48,41 +48,34 @@ jobs:
           DEFAULT_BUMP: patch
         if: ${{ github.event_name == 'push' && !contains(env.COMMIT_MESSAGES, '#skip') }}
         uses: anothrNick/github-tag-action@1.33.0
-      - uses: 8398a7/action-slack@v3
-        with:
-          status: custom
+      - name: Slack Failure Notify
+        uses: 8398a7/action-slack@v3
+        with: 
+          status: ${{ job.status }}
           fields: repo,message,commit,author,took
+          custom_payload: | 
+           {
+            attachments: [
+              {
+                color: 'danger'
+              }
+           }
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          notify_when: 'failure'
+      - name: Slack Success Notify
+        uses: 8398a7/action-slack@v3
+        with: 
+          status: custom
+          fields: workflow, job, commit, repo, author, took
           custom_payload: |
             {
               attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                title: '${{ github.event.repository.name }}',
-                ${{ job.status }}' === 'success' ? { 
-                fields: [
-                {
-                  title: 'Repo',
-                  value: '${{ github.event.repo.name }}',
-                },
-                {
-                  title: 'Commit',
-                  value: '${{ github.event.commits[0].id }}',
-                  short: true
-                },{
-                  title: 'Message',
-                  value: '${{ github.event.commits[0].message }}',
-                  short: false
-                }, {
-                  title: 'Author',
-                  value: '${{ github.event.commits[0].author.name }}',
-                  short: true
-                }, {
-                  title: 'Took',
-                  value: '${{ job.took }}',
-                  short: true
-                }] :
+                color: 'good',
                 text: `A new version deployed to ${{ github.event.repo.url }} (${github.event.commits[0].id}) by ${{ github.event.commits[0].author.name }} <${{ github.event.commits[0].author.email }}> build took ${process.env.AS_TOOK}`,
               }]
             }
-        env:
+        env: 
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
+          notify_when: 'success'  
+      
