@@ -56,5 +56,5 @@ jobs:
       - name: commit messages
         env:
           SKIP_CONDITION: ${{ toJson(github.event.commits.*.message).join }}
-        run: echo "${{ !contains(env.SKIP_CONDITION, '#skip') }}"
+        run: echo "${{ env.SKIP_CONDITION }}"
       
